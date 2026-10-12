@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    pom.xml = la "lista de compras" del proyecto.
+    Aqui se dice que version de Java y que librerias usa la aplicacion.
+    Maven las descarga solo la primera vez que se compila.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.6</version>
+		<relativePath/>
+	</parent>
+
+	<groupId>com.example</groupId>
+	<artifactId>api_barberia</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>api_barberia</name>
+	<description>API REST de una barberia: barberos y citas</description>
+
+	<properties>
+		<!-- Funciona con Java 17 o superior (17, 21...) -->
+		<java.version>17</java.version>
+	</properties>
+
+	<dependencies>
+		<!-- Para crear la API REST (controladores, JSON, servidor web) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- Para guardar datos en la base de datos con JPA / Hibernate -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- Base de datos H2 (relacional, funciona en memoria, no hay que instalar nada) -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Para la prueba automatica que revisa que la app arranca -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Genera el archivo .jar ejecutable en la carpeta target -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

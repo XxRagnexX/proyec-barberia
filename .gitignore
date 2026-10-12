@@ -1,0 +1,16 @@
+# Carpeta generada al compilar (no se sube)
+target/
+
+# Bases de datos H2 de archivo (no se suben)
+data/
+*.mv.db
+*.trace.db
+
+# Archivos de los editores
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+.DS_Store
