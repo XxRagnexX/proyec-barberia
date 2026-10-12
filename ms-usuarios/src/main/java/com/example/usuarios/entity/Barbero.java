@@ -30,6 +30,15 @@ public class Barbero {
     @Column(nullable = false)
     private String telefono;
 
+    public Barbero() {
+    }
+
+    public Barbero(String nombre, String especialidad, String telefono) {
+        this.nombre = nombre;
+        this.especialidad = especialidad;
+        this.telefono = telefono;
+    }
+
     public Long getId() {
         return id;
     }
