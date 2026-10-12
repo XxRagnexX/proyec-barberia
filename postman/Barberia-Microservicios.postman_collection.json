@@ -1,0 +1,1309 @@
+{
+  "info": {
+    "_postman_id": "9f3c0a11-b55c-4d2a-95e8-2b7f6a4811a3",
+    "name": "API Barbería - Microservicios (EP2)",
+    "description": "Colección de pruebas para los 5 microservicios de la barbería. Con los 5 servicios encendidos, usar Run collection para ejecutarlas todas en orden.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. ms-usuarios (8081)",
+      "item": [
+        {
+          "name": "Listar barberos (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Devuelve una lista\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear barbero (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set(\"barberoId\", pm.response.json().id);",
+                  "pm.test(\"nombre correcto\", function () { pm.expect(pm.response.json().nombre).to.eql(\"Ignacio Vergara\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ignacio Vergara\",\n  \"especialidad\": \"Diseños y freestyle\",\n  \"telefono\": \"+56987654321\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar barbero por id (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"telefono correcto\", function () { pm.expect(pm.response.json().telefono).to.eql(\"+56987654321\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos/{{barberoId}}",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos", "{{barberoId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar barbero (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"especialidad correcto\", function () { pm.expect(pm.response.json().especialidad).to.eql(\"Fade y diseños\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos/{{barberoId}}",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos", "{{barberoId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ignacio Vergara\",\n  \"especialidad\": \"Fade y diseños\",\n  \"telefono\": \"+56987654321\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear barbero con datos vacíos (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"nombre es obligatorio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"\",\n  \"telefono\": \"\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Buscar barbero que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"No existe un barbero\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos/9999",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos", "9999"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Actualizar barbero que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos/9999",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos", "9999"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ignacio Vergara\",\n  \"especialidad\": \"Fade y diseños\",\n  \"telefono\": \"+56987654321\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Eliminar barbero que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos/9999",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos", "9999"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. ms-citas (8082)",
+      "item": [
+        {
+          "name": "Listar citas (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Devuelve una lista\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear cita (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set(\"citaId\", pm.response.json().id);",
+                  "pm.test(\"servicio correcto\", function () { pm.expect(pm.response.json().servicio).to.eql(\"Corte + barba\"); });",
+                  "pm.test(\"barberoId correcto\", function () { pm.expect(pm.response.json().barberoId).to.eql(pm.collectionVariables.get(\"barberoId\")); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCliente\": \"Benjamín Castro\",\n  \"servicio\": \"Corte + barba\",\n  \"servicioId\": {{servicioId}},\n  \"fechaHora\": \"2026-12-20T15:30:00\",\n  \"precio\": 15000,\n  \"barberoId\": {{barberoId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar cita por id (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"nombreCliente correcto\", function () { pm.expect(pm.response.json().nombreCliente).to.eql(\"Benjamín Castro\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas/{{citaId}}",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas", "{{citaId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar cita (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"precio correcto\", function () { pm.expect(pm.response.json().precio).to.eql(16000); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas/{{citaId}}",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas", "{{citaId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCliente\": \"Benjamín Castro\",\n  \"servicio\": \"Corte + barba\",\n  \"servicioId\": {{servicioId}},\n  \"fechaHora\": \"2026-12-20T15:30:00\",\n  \"precio\": 16000,\n  \"barberoId\": {{barberoId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear cita con datos vacíos (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"nombre del cliente es obligatorio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear cita con precio 0 (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"precio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCliente\": \"Benjamín Castro\",\n  \"servicio\": \"Corte + barba\",\n  \"fechaHora\": \"2026-12-20T15:30:00\",\n  \"precio\": 0,\n  \"barberoId\": {{barberoId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear cita sin barberoId (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"barbero\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCliente\": \"Benjamín Castro\",\n  \"servicio\": \"Corte + barba\",\n  \"fechaHora\": \"2026-12-20T15:30:00\",\n  \"precio\": 15000\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Buscar cita que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"No existe una cita\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas/9999",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas", "9999"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Actualizar cita que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas/9999",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas", "9999"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCliente\": \"Benjamín Castro\",\n  \"servicio\": \"Corte + barba\",\n  \"fechaHora\": \"2026-12-20T15:30:00\",\n  \"precio\": 16000,\n  \"barberoId\": {{barberoId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Eliminar cita que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas/9999",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas", "9999"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. ms-servicios (8083)",
+      "item": [
+        {
+          "name": "Listar servicios (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Devuelve una lista\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear servicio (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set(\"servicioId\", pm.response.json().id);",
+                  "pm.test(\"nombre correcto\", function () { pm.expect(pm.response.json().nombre).to.eql(\"Corte + barba\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Corte + barba\",\n  \"descripcion\": \"Combo corte y perfilado de barba\",\n  \"precio\": 15000,\n  \"duracionMinutos\": 45\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar servicio por id (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"descripcion correcta\", function () { pm.expect(pm.response.json().descripcion).to.include(\"Combo\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios/{{servicioId}}",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios", "{{servicioId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar servicio (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"precio correcto\", function () { pm.expect(pm.response.json().precio).to.eql(16000); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios/{{servicioId}}",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios", "{{servicioId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Corte + barba premium\",\n  \"descripcion\": \"Combo corte y perfilado de barba\",\n  \"precio\": 16000,\n  \"duracionMinutos\": 45\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear servicio sin nombre (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"nombre es obligatorio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Sin nombre\",\n  \"precio\": 10000\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear servicio con precio 0 (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"precio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Corte x\",\n  \"precio\": 0\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Buscar servicio que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"No existe un servicio\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios/9999",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios", "9999"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Eliminar servicio que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios/9999",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios", "9999"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. ms-pagos (8084)",
+      "item": [
+        {
+          "name": "Listar pagos (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Devuelve una lista\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear pago (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set(\"pagoId\", pm.response.json().id);",
+                  "pm.test(\"monto correcto\", function () { pm.expect(pm.response.json().monto).to.eql(15000); });",
+                  "pm.test(\"citaId correcto\", function () { pm.expect(pm.response.json().citaId).to.eql(pm.collectionVariables.get(\"citaId\")); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"citaId\": {{citaId}},\n  \"monto\": 15000,\n  \"metodoPago\": \"EFECTIVO\",\n  \"estado\": \"PAGADO\",\n  \"fechaPago\": \"2026-12-20T15:35:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar pago por id (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"metodoPago correcto\", function () { pm.expect(pm.response.json().metodoPago).to.eql(\"EFECTIVO\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos/{{pagoId}}",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos", "{{pagoId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar pago (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"estado correcto\", function () { pm.expect(pm.response.json().estado).to.eql(\"ANULADO\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos/{{pagoId}}",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos", "{{pagoId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"citaId\": {{citaId}},\n  \"monto\": 15000,\n  \"metodoPago\": \"EFECTIVO\",\n  \"estado\": \"ANULADO\",\n  \"fechaPago\": \"2026-12-20T15:40:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear pago con monto 0 (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"monto\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"citaId\": {{citaId}},\n  \"monto\": 0,\n  \"metodoPago\": \"EFECTIVO\",\n  \"estado\": \"PAGADO\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear pago con método inválido (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"metodo de pago\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"citaId\": {{citaId}},\n  \"monto\": 15000,\n  \"metodoPago\": \"CRIPTO\",\n  \"estado\": \"PAGADO\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Buscar pago que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"No existe un pago\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos/9999",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos", "9999"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Eliminar pago que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos/9999",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos", "9999"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5. ms-resenas (8085)",
+      "item": [
+        {
+          "name": "Listar resenas (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Devuelve una lista\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear resena (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set(\"resenaId\", pm.response.json().id);",
+                  "pm.test(\"calificacion correcta\", function () { pm.expect(pm.response.json().calificacion).to.eql(5); });",
+                  "pm.test(\"barberoId correcto\", function () { pm.expect(pm.response.json().barberoId).to.eql(pm.collectionVariables.get(\"barberoId\")); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barberoId\": {{barberoId}},\n  \"citaId\": {{citaId}},\n  \"calificacion\": 5,\n  \"comentario\": \"Excelente atencion\",\n  \"fecha\": \"2026-12-20\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar resena por id (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"comentario correcto\", function () { pm.expect(pm.response.json().comentario).to.eql(\"Excelente atencion\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas/{{resenaId}}",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas", "{{resenaId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar resena (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"calificacion actualizada\", function () { pm.expect(pm.response.json().calificacion).to.eql(4); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas/{{resenaId}}",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas", "{{resenaId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barberoId\": {{barberoId}},\n  \"citaId\": {{citaId}},\n  \"calificacion\": 4,\n  \"comentario\": \"Muy buena atencion\",\n  \"fecha\": \"2026-12-20\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear resena con calificacion 6 (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"calificacion\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barberoId\": {{barberoId}},\n  \"calificacion\": 6,\n  \"comentario\": \"Fuera de rango\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Crear resena sin barberoId (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"barbero\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calificacion\": 5,\n  \"comentario\": \"Sin barbero\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Buscar resena que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Mensaje de error\", function () { pm.expect(pm.response.text()).to.include(\"No existe una resena\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas/9999",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas", "9999"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR - Eliminar resena que no existe (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas/9999",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas", "9999"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "6. Limpieza (eliminar lo creado)",
+      "item": [
+        {
+          "name": "Eliminar resena creada (204)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{resenasUrl}}/api/resenas/{{resenaId}}",
+              "host": ["{{resenasUrl}}"],
+              "path": ["api", "resenas", "{{resenaId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar pago creado (204)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{pagosUrl}}/api/pagos/{{pagoId}}",
+              "host": ["{{pagosUrl}}"],
+              "path": ["api", "pagos", "{{pagoId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cita creada (204)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{citasUrl}}/api/citas/{{citaId}}",
+              "host": ["{{citasUrl}}"],
+              "path": ["api", "citas", "{{citaId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar servicio creado (204)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{serviciosUrl}}/api/servicios/{{servicioId}}",
+              "host": ["{{serviciosUrl}}"],
+              "path": ["api", "servicios", "{{servicioId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar barbero creado (204)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{usuariosUrl}}/api/barberos/{{barberoId}}",
+              "host": ["{{usuariosUrl}}"],
+              "path": ["api", "barberos", "{{barberoId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "usuariosUrl", "value": "http://localhost:8081" },
+    { "key": "citasUrl", "value": "http://localhost:8082" },
+    { "key": "serviciosUrl", "value": "http://localhost:8083" },
+    { "key": "pagosUrl", "value": "http://localhost:8084" },
+    { "key": "resenasUrl", "value": "http://localhost:8085" },
+    { "key": "barberoId", "value": "1" },
+    { "key": "citaId", "value": "1" },
+    { "key": "servicioId", "value": "1" },
+    { "key": "pagoId", "value": "1" },
+    { "key": "resenaId", "value": "1" }
+  ]
+}
